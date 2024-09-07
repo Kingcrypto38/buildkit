@@ -442,7 +442,7 @@ func testExportCacheLoop(t *testing.T, sb integration.Sandbox) {
 	f := getFrontend(t, sb)
 
 	dockerfile := []byte(`
-FROM alpine as base
+FROM alpine:3.20.3 as base
 RUN echo aa > /foo
 WORKDIR /bar
 
@@ -3816,7 +3816,7 @@ func testWildcardRenameCache(t *testing.T, sb integration.Sandbox) {
 	f := getFrontend(t, sb)
 
 	dockerfile := []byte(`
-FROM alpine
+FROM alpine:3.20.3
 COPY file* /files/
 RUN ls /files/file1
 `)
@@ -5211,7 +5211,7 @@ func testCgroupParent(t *testing.T, sb integration.Sandbox) {
 
 	f := getFrontend(t, sb)
 	dockerfile := []byte(`
-FROM alpine AS base
+FROM alpine:3.20.3 AS base
 RUN mkdir /out; (for i in $(seq 1 10); do sleep 1 & done 2>/out/error); cat /proc/self/cgroup > /out/cgroup
 FROM scratch
 COPY --from=base /out /
@@ -5480,7 +5480,7 @@ func testNamedImageContextTimestamps(t *testing.T, sb integration.Sandbox) {
 	f := getFrontend(t, sb)
 
 	dockerfile := []byte(`
-FROM alpine
+FROM alpine:3.20.3
 RUN echo foo >> /test
 `)
 	dir := integration.Tmpdir(
@@ -5916,7 +5916,7 @@ func testNamedInputContext(t *testing.T, sb integration.Sandbox) {
 	defer c.Close()
 
 	dockerfile := []byte(`
-FROM alpine
+FROM alpine:3.20.3
 ENV FOO=bar
 RUN echo first > /out
 `)
@@ -6025,7 +6025,7 @@ func testNamedMultiplatformInputContext(t *testing.T, sb integration.Sandbox) {
 	defer c.Close()
 
 	dockerfile := []byte(`
-FROM --platform=$BUILDPLATFORM alpine
+FROM --platform=$BUILDPLATFORM alpine:3.20.3
 ARG TARGETARCH
 ENV FOO=bar-$TARGETARCH
 RUN echo "foo $TARGETARCH" > /out
@@ -6236,7 +6236,7 @@ func testNamedFilteredContext(t *testing.T, sb integration.Sandbox) {
 FROM scratch AS copy_from
 COPY --from=foo /foo /
 
-FROM alpine AS run_mount
+FROM alpine:3.20.3 AS run_mount
 RUN --mount=from=foo,src=/foo,target=/in/foo cp /in/foo /foo
 
 FROM foo AS image_source
@@ -6899,7 +6899,7 @@ func testCopyUnicodePath(t *testing.T, sb integration.Sandbox) {
 	defer c.Close()
 
 	dockerfile := []byte(`
-FROM alpine
+FROM alpine:3.20.3
 COPY test-äöü.txt /
 COPY test-%C3%A4%C3%B6%C3%BC.txt /
 COPY test+aou.txt /
