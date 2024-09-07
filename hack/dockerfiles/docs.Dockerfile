@@ -21,7 +21,7 @@ RUN --mount=target=. \
   --mount=target=/go/pkg/mod,type=cache \
   go build -mod=vendor -o /out/docsgen ./docs/generate.go
 
-FROM alpine AS gen
+FROM alpine:3.20.3 AS gen
 RUN apk add --no-cache rsync git
 WORKDIR /src
 COPY --from=docsgen /out/docsgen /usr/bin
